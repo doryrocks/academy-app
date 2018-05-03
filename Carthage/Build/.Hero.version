@@ -1,0 +1,9 @@
+{
+  "commitish" : "1.2.0",
+  "iOS" : [
+    {
+      "name" : "Hero",
+      "hash" : "abbed05f82a969a7e17307e150ef868bc1e90686fe15ba70f4676d3d7aae3c64"
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+module Pods_4_week_homework_final [system] {
+  umbrella header "Pods-4_week_homework_final-umbrella.h"
+
+  export *
+  module * { export * }
+}
