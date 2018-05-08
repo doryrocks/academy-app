@@ -8,8 +8,14 @@ class RemoteDataProvider: RemoteDataProviderType {
         urlRequest.httpMethod = "GET"
         urlRequest.addValue(token, forHTTPHeaderField: "AccessToken")
         let urlSession = URLSession.shared.dataTask(with: urlRequest) { data, _, _ in
+            guard let data = data else {
+                DispatchQueue.main.async {
+                    completion(nil)
+                }
+                return
+            }
             let decoder = JSONDecoder()
-            let model = try? decoder.decode(BusinessCardContent.self, from: data!)
+            let model = try? decoder.decode(BusinessCardContent.self, from: data)
             DispatchQueue.main.async {
                 completion(model)
             }
@@ -26,8 +32,14 @@ class RemoteDataProvider: RemoteDataProviderType {
         let data = try? encoder.encode(login)
         urlRequest.httpBody = data
         let urlSession = URLSession.shared.dataTask(with: urlRequest) { data, _, _ in
+            guard let data = data else {
+                DispatchQueue.main.async {
+                    completion(nil)
+                }
+                return
+            }
             let decoder = JSONDecoder()
-            let login = try? decoder.decode(AccountCredentials.self, from: data!)
+            let login = try? decoder.decode(AccountCredentials.self, from: data)
             DispatchQueue.main.async {
                 completion(login)
             }
@@ -38,8 +50,15 @@ class RemoteDataProvider: RemoteDataProviderType {
         var url = getUrl(for: .participant)
         url = URL(string: url.absoluteString + "\(id)")!
         let urlSession = URLSession.shared.dataTask(with: url) { data, _, _ in
+            guard let data = data else {
+                DispatchQueue.main.async {
+                    completion(nil)
+                }
+                return
+            }
+
             let decoder = JSONDecoder()
-            let model = try? decoder.decode(BusinessCardContent.self, from: data!)
+            let model = try? decoder.decode(BusinessCardContent.self, from: data)
             DispatchQueue.main.async {
                 completion(model)
             }
@@ -48,10 +67,15 @@ class RemoteDataProvider: RemoteDataProviderType {
     }
     func loadParticipants(completion: @escaping (_ participants: [Participant]?) -> Void) {
         let url = getUrl(for: .participants)
-        print(url)
-        let urlSession = URLSession.shared.dataTask(with: url) { data, _, _ in
+        let urlSession = URLSession.shared.dataTask(with: url) { data, response, error in
+            guard let data = data else {
+                DispatchQueue.main.async {
+                    completion(nil)
+                }
+                return
+            }
             let decoder = JSONDecoder()
-            let model = try? decoder.decode([Participant].self, from: data!)
+            let model = try? decoder.decode([Participant].self, from: data)
             DispatchQueue.main.async {
                 completion(model)
             }
